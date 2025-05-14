@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <a href="/" className="font-serif text-2xl font-medium text-beauty-800">
-            BeautyMoment
+            Ila's Beauty
           </a>
         </div>
         
