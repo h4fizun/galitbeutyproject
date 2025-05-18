@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ShoppingCart, User } from 'lucide-react';
+import { ShoppingCart, User, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,6 +16,7 @@ import {
 const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const isAdmin = user && ['admin@example.com'].includes(user.email || ''); // Replace with your admin emails
 
   const handleAuthAction = () => {
     if (!user) {
@@ -57,6 +58,17 @@ const Navbar: React.FC = () => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate('/profile')}>Profile</DropdownMenuItem>
+                {isAdmin && (
+                  <>
+                    <DropdownMenuItem onClick={() => navigate('/admin')}>
+                      <Settings className="h-4 w-4 mr-2" /> Admin Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/reseller-admin')}>
+                      Reseller Admin
+                    </DropdownMenuItem>
+                  </>
+                )}
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
