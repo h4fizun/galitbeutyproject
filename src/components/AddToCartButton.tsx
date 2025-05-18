@@ -3,6 +3,7 @@ import React from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface AddToCartButtonProps {
   onAddToCart: () => void;
@@ -10,6 +11,7 @@ interface AddToCartButtonProps {
 
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({ onAddToCart }) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const handleAddToCart = () => {
     onAddToCart();
@@ -17,6 +19,12 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ onAddToCart }) => {
       title: "Added to cart",
       description: "Your item has been added to your cart.",
     });
+    
+    // In a real app, you might not navigate immediately, but after a short delay
+    // or provide a button in the toast to navigate to checkout
+    setTimeout(() => {
+      navigate('/checkout');
+    }, 1000);
   };
   
   return (
