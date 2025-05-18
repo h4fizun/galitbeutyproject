@@ -35,7 +35,7 @@ interface Application {
     first_name: string | null;
     last_name: string | null;
     reseller_stage: ResellerStage | null;
-  };
+  } | null;
 }
 
 const ResellerAdmin = () => {
@@ -55,17 +55,29 @@ const ResellerAdmin = () => {
   const fetchApplications = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      // First get all applications
+      const { data: applicationsData, error: applicationsError } = await supabase
         .from('reseller_applications')
-        .select(`
-          *,
-          profile:profiles(first_name, last_name, reseller_stage)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
+      if (applicationsError) throw applicationsError;
       
-      setApplications(data || []);
+      // Then for each application, get the profile data
+      const applicationsWithProfiles = await Promise.all((applicationsData || []).map(async (app) => {
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('first_name, last_name, reseller_stage')
+          .eq('id', app.user_id)
+          .single();
+        
+        return {
+          ...app,
+          profile: profileError ? null : profileData
+        };
+      }));
+      
+      setApplications(applicationsWithProfiles);
     } catch (error: any) {
       toast({
         title: "Error fetching applications",
@@ -127,10 +139,14 @@ const ResellerAdmin = () => {
         app.user_id === userId 
           ? { 
               ...app, 
-              profile: { 
-                ...app.profile, 
-                reseller_stage: stage 
-              } 
+              profile: app.profile ? {
+                ...app.profile,
+                reseller_stage: stage
+              } : {
+                first_name: null,
+                last_name: null,
+                reseller_stage: stage
+              }
             } 
           : app
       ));
@@ -189,7 +205,7 @@ const ResellerAdmin = () => {
               <TableRow key={application.id}>
                 <TableCell className="font-medium">{application.email}</TableCell>
                 <TableCell>
-                  {application.profile?.first_name} {application.profile?.last_name}
+                  {application.profile ? `${application.profile.first_name || ''} ${application.profile.last_name || ''}`.trim() || 'N/A' : 'N/A'}
                 </TableCell>
                 <TableCell>
                   {format(new Date(application.created_at), 'MMM dd, yyyy')}

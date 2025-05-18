@@ -3,9 +3,8 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import ProductGallery from '@/components/ProductGallery';
 import ProductInfo from '@/components/ProductInfo';
-import ReviewSection from '@/components/ReviewSection';
 import RelatedProducts from '@/components/RelatedProducts';
-import { featuredProduct, productReviews, relatedProducts } from '@/data/mock-data';
+import { featuredProduct, relatedProducts } from '@/data/mock-data';
 import { Separator } from '@/components/ui/separator';
 
 const Index = () => {
@@ -38,10 +37,7 @@ const Index = () => {
           
           <Separator className="my-16" />
           
-          <ReviewSection reviews={productReviews} averageRating={featuredProduct.rating} />
-          
-          <Separator className="my-16" />
-          
+          {/* Related Products Section */}
           <RelatedProducts products={relatedProducts} />
         </div>
       </main>
