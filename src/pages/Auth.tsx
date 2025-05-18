@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Auth = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [applyAsReseller, setApplyAsReseller] = useState(false);
 
   useEffect(() => {
     if (user && !loading) {
@@ -34,7 +36,7 @@ const Auth = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await signUp(email, password, firstName, lastName);
+    await signUp(email, password, firstName, lastName, applyAsReseller);
     setIsSubmitting(false);
   };
 
@@ -146,6 +148,20 @@ const Auth = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required 
                     />
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="reseller" 
+                      checked={applyAsReseller}
+                      onCheckedChange={(checked) => setApplyAsReseller(checked === true)}
+                    />
+                    <label
+                      htmlFor="reseller"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Apply to become a reseller
+                    </label>
                   </div>
                   
                   <Button 

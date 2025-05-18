@@ -15,7 +15,10 @@ export type Database = {
           created_at: string
           first_name: string | null
           id: string
+          is_reseller: boolean | null
           last_name: string | null
+          reseller_approved_at: string | null
+          reseller_stage: Database["public"]["Enums"]["reseller_stage"] | null
           updated_at: string
         }
         Insert: {
@@ -23,7 +26,10 @@ export type Database = {
           created_at?: string
           first_name?: string | null
           id: string
+          is_reseller?: boolean | null
           last_name?: string | null
+          reseller_approved_at?: string | null
+          reseller_stage?: Database["public"]["Enums"]["reseller_stage"] | null
           updated_at?: string
         }
         Update: {
@@ -31,8 +37,38 @@ export type Database = {
           created_at?: string
           first_name?: string | null
           id?: string
+          is_reseller?: boolean | null
           last_name?: string | null
+          reseller_approved_at?: string | null
+          reseller_stage?: Database["public"]["Enums"]["reseller_stage"] | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      reseller_applications: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -44,7 +80,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      reseller_stage: "none" | "brown" | "silver" | "gold"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -159,6 +195,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      reseller_stage: ["none", "brown", "silver", "gold"],
+    },
   },
 } as const

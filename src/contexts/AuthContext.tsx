@@ -9,7 +9,7 @@ type AuthContextType = {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, applyAsReseller?: boolean) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -68,10 +68,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
+  const signUp = async (email: string, password: string, firstName: string, lastName: string, applyAsReseller = false) => {
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -88,12 +88,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           description: error.message,
           variant: "destructive"
         });
-      } else {
+        return;
+      } 
+      
+      // If the user wants to apply as a reseller
+      if (applyAsReseller && data.user) {
+        const { error: resellerError } = await supabase
+          .from('reseller_applications')
+          .insert({
+            user_id: data.user.id,
+            email: email
+          });
+          
+        if (resellerError) {
+          console.error("Error creating reseller application:", resellerError);
+          toast({
+            title: "Notice",
+            description: "Signed up successfully, but there was an issue with your reseller application. Please try applying later."
+          });
+          return;
+        }
+      }
+      
+      toast({
+        title: "Account created!",
+        description: "Please check your email to confirm your account."
+      });
+      
+      if (applyAsReseller) {
         toast({
-          title: "Account created!",
-          description: "Please check your email to confirm your account."
+          title: "Reseller Application Submitted",
+          description: "Your application to become a reseller has been submitted and is under review."
         });
       }
+      
     } catch (error: any) {
       toast({
         title: "Sign up failed",

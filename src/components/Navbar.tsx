@@ -4,15 +4,21 @@ import { ShoppingCart, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleAuthAction = () => {
-    if (user) {
-      signOut();
-    } else {
+    if (!user) {
       navigate('/auth');
     }
   };
@@ -39,14 +45,31 @@ const Navbar: React.FC = () => {
             <ShoppingCart className="h-5 w-5" />
           </Button>
           
-          <Button 
-            variant={user ? "outline" : "default"} 
-            className="flex items-center space-x-2" 
-            onClick={handleAuthAction}
-          >
-            <User className="h-4 w-4" />
-            <span>{user ? 'Sign Out' : 'Sign In'}</span>
-          </Button>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="flex items-center space-x-2">
+                  <User className="h-4 w-4" />
+                  <span>Account</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate('/profile')}>Profile</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button 
+              variant="default"
+              className="flex items-center space-x-2" 
+              onClick={handleAuthAction}
+            >
+              <User className="h-4 w-4" />
+              <span>Sign In</span>
+            </Button>
+          )}
         </div>
       </div>
     </nav>
