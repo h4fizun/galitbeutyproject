@@ -2,45 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { format } from 'date-fns';
-import { Badge } from '@/components/ui/badge';
-
-type ResellerStage = 'none' | 'brown' | 'silver' | 'gold';
-
-interface Application {
-  id: string;
-  email: string;
-  status: string;
-  created_at: string;
-  user_id: string;
-  profile?: {
-    first_name: string | null;
-    last_name: string | null;
-    reseller_stage: ResellerStage | null;
-  } | null;
-}
+import { ResellerStage, ResellerApplication } from '@/types/reseller';
+import ResellerApplicationsTable from '@/components/reseller/ResellerApplicationsTable';
 
 const ResellerAdmin = () => {
   const { user } = useAuth();
-  const [applications, setApplications] = useState<Application[]>([]);
+  const [applications, setApplications] = useState<ResellerApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [adminEmails] = useState(['admin@example.com']); // Replace with actual admin emails
 
@@ -183,87 +151,12 @@ const ResellerAdmin = () => {
     <div className="container mx-auto py-8 px-4">
       <h1 className="text-3xl font-serif text-beauty-800 mb-8">Reseller Applications</h1>
       
-      {loading && applications.length === 0 ? (
-        <div className="text-center py-12">Loading applications...</div>
-      ) : applications.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">No reseller applications found.</div>
-      ) : (
-        <Table>
-          <TableCaption>List of reseller applications</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Email</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Reseller Tier</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {applications.map((application) => (
-              <TableRow key={application.id}>
-                <TableCell className="font-medium">{application.email}</TableCell>
-                <TableCell>
-                  {application.profile ? `${application.profile.first_name || ''} ${application.profile.last_name || ''}`.trim() || 'N/A' : 'N/A'}
-                </TableCell>
-                <TableCell>
-                  {format(new Date(application.created_at), 'MMM dd, yyyy')}
-                </TableCell>
-                <TableCell>
-                  <Badge variant={
-                    application.status === 'approved' ? 'default' :
-                    application.status === 'rejected' ? 'destructive' : 'secondary'
-                  }>
-                    {application.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Select 
-                    defaultValue={application.profile?.reseller_stage || 'none'}
-                    onValueChange={(value: ResellerStage) => updateResellerStatus(
-                      application.user_id, 
-                      value !== 'none', 
-                      value
-                    )}
-                  >
-                    <SelectTrigger className="w-[120px]">
-                      <SelectValue placeholder="Tier" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">None</SelectItem>
-                      <SelectItem value="brown">Brown (10%)</SelectItem>
-                      <SelectItem value="silver">Silver (15%)</SelectItem>
-                      <SelectItem value="gold">Gold (20%)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </TableCell>
-                <TableCell>
-                  {application.status !== 'approved' && (
-                    <Button 
-                      size="sm" 
-                      variant="default"
-                      onClick={() => updateApplicationStatus(application.id, 'approved')}
-                      className="mr-2"
-                    >
-                      Approve
-                    </Button>
-                  )}
-                  {application.status !== 'rejected' && (
-                    <Button 
-                      size="sm" 
-                      variant="destructive"
-                      onClick={() => updateApplicationStatus(application.id, 'rejected')}
-                    >
-                      Reject
-                    </Button>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+      <ResellerApplicationsTable
+        applications={applications}
+        loading={loading}
+        onStatusChange={updateApplicationStatus}
+        onResellerStageChange={updateResellerStatus}
+      />
     </div>
   );
 };
