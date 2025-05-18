@@ -22,16 +22,25 @@ const categorySchema = z.object({
 
 type CategoryFormValues = z.infer<typeof categorySchema>;
 
+// Add extended type that includes id and productCount
+interface CategoryData extends CategoryFormValues {
+  id?: string;
+  productCount?: number;
+}
+
 interface CategoryFormProps {
-  category?: any;
-  onSave: (category: CategoryFormValues) => void;
+  category?: CategoryData;
+  onSave: (category: CategoryData) => void;
   onCancel: () => void;
 }
 
 const CategoryForm = ({ category, onSave, onCancel }: CategoryFormProps) => {
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
-    defaultValues: category || {
+    defaultValues: category ? {
+      name: category.name,
+      description: category.description,
+    } : {
       name: '',
       description: '',
     }

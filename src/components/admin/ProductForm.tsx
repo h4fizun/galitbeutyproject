@@ -26,16 +26,27 @@ const productSchema = z.object({
 
 type ProductFormValues = z.infer<typeof productSchema>;
 
+// Add extended type that includes id
+interface ProductData extends ProductFormValues {
+  id?: string;
+}
+
 interface ProductFormProps {
-  product?: any;
-  onSave: (product: ProductFormValues) => void;
+  product?: ProductData;
+  onSave: (product: ProductData) => void;
   onCancel: () => void;
 }
 
 const ProductForm = ({ product, onSave, onCancel }: ProductFormProps) => {
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
-    defaultValues: product || {
+    defaultValues: product ? {
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      stock: product.stock,
+      description: product.description
+    } : {
       name: '',
       category: '',
       price: 0,
