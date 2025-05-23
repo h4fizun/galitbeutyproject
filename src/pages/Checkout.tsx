@@ -1,11 +1,12 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import PaymentMethodSelector from '@/components/PaymentMethodSelector';
 import CheckoutSummary from '@/components/CheckoutSummary';
+import AddressForm from '@/components/AddressForm';
 import { featuredProduct } from '@/data/mock-data';
 
 const Checkout = () => {
@@ -13,6 +14,14 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [shippingAddress, setShippingAddress] = useState({
+    name: 'Jane Doe',
+    street: '123 Beauty Street',
+    city: 'Los Angeles',
+    state: 'CA',
+    zipCode: '90001'
+  });
   
   // Mock checkout items - in a real app this would come from the cart
   const checkoutItems = [{
@@ -25,6 +34,11 @@ const Checkout = () => {
   
   const handlePaymentMethodChange = (method: string) => {
     setSelectedPaymentMethod(method);
+  };
+
+  const handleAddressChange = (newAddress: typeof shippingAddress) => {
+    setShippingAddress(newAddress);
+    setIsEditingAddress(false);
   };
   
   const handleCheckout = async () => {
@@ -62,8 +76,6 @@ const Checkout = () => {
   
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
       <main className="flex-grow container mx-auto px-4 py-8">
         <h1 className="text-3xl font-serif mb-8">Checkout</h1>
         
@@ -71,19 +83,33 @@ const Checkout = () => {
           <div className="lg:col-span-2 space-y-8">
             {/* Shipping Information Section */}
             <div className="bg-white p-6 rounded-lg border">
-              <h2 className="text-xl font-medium mb-4">Shipping Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-gray-800 font-medium">Jane Doe</p>
-                  <p className="text-gray-600">123 Beauty Street</p>
-                  <p className="text-gray-600">Los Angeles, CA 90001</p>
-                </div>
-                <div className="text-right">
-                  <Button variant="outline" size="sm">
-                    Change
-                  </Button>
-                </div>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-medium">Shipping Information</h2>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setIsEditingAddress(!isEditingAddress)}
+                >
+                  {isEditingAddress ? 'Cancel' : 'Change'}
+                </Button>
               </div>
+              
+              {isEditingAddress ? (
+                <AddressForm 
+                  initialAddress={shippingAddress}
+                  onSave={handleAddressChange}
+                />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-gray-800 font-medium">{shippingAddress.name}</p>
+                    <p className="text-gray-600">{shippingAddress.street}</p>
+                    <p className="text-gray-600">
+                      {shippingAddress.city}, {shippingAddress.state} {shippingAddress.zipCode}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
             
             {/* Payment Method Section */}
