@@ -10,15 +10,12 @@ const ResellerAdmin = () => {
   const { user } = useAuth();
   const [applications, setApplications] = useState<ResellerApplication[]>([]);
   const [loading, setLoading] = useState(true);
-  const [adminEmails] = useState(['admin@example.com']); // Replace with actual admin emails
-
-  const isAdmin = user && adminEmails.includes(user.email || '');
 
   useEffect(() => {
-    if (user && isAdmin) {
+    if (user) {
       fetchApplications();
     }
-  }, [user, isAdmin]);
+  }, [user]);
 
   const fetchApplications = async () => {
     try {
@@ -136,19 +133,8 @@ const ResellerAdmin = () => {
     }
   };
 
-  if (!user || !isAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-serif text-beauty-800">Access Denied</h2>
-          <p className="text-gray-600 mt-2">You don't have permission to view this page.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div>
       <h1 className="text-3xl font-serif text-beauty-800 mb-8">Reseller Applications</h1>
       
       <ResellerApplicationsTable

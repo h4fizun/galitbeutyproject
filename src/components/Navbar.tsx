@@ -1,9 +1,10 @@
 
 import React from 'react';
-import { ShoppingBasket, User, Settings } from 'lucide-react';
+import { ShoppingBasket, User, Settings, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,12 +51,28 @@ const Navbar: React.FC = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="flex items-center space-x-2">
-                  <User className="h-4 w-4" />
-                  <span>Account</span>
+                  {isAdmin ? (
+                    <>
+                      <Shield className="h-4 w-4 text-red-500" />
+                      <span>Admin</span>
+                    </>
+                  ) : (
+                    <>
+                      <User className="h-4 w-4" />
+                      <span>Account</span>
+                    </>
+                  )}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {isAdmin ? 
+                    <div className="flex items-center gap-2">
+                      My Account <Badge variant="destructive" className="ml-2">Admin</Badge>
+                    </div> : 
+                    "My Account"
+                  }
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate('/profile')}>Profile</DropdownMenuItem>
                 {isAdmin && (

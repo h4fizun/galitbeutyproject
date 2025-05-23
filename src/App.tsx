@@ -14,6 +14,8 @@ import ResellerAdmin from "./pages/ResellerAdmin";
 import AdminDashboard from "./pages/AdminDashboard";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
+import UserLayout from "./layouts/UserLayout";
+import AdminLayout from "./layouts/AdminLayout";
 
 const queryClient = new QueryClient();
 
@@ -25,15 +27,27 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            {/* User Routes */}
+            <Route path="/" element={<UserLayout><Index /></UserLayout>} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="/reseller-admin" element={<ProtectedRoute><ResellerAdmin /></ProtectedRoute>} />
-            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
+            <Route path="/checkout" element={<UserLayout><Checkout /></UserLayout>} />
+            <Route path="/order-success" element={<UserLayout><OrderSuccess /></UserLayout>} />
+            <Route path="/profile" element={<ProtectedRoute><UserLayout><Profile /></UserLayout></ProtectedRoute>} />
+            
+            {/* Admin Routes */}
+            <Route path="/reseller-admin" element={
+              <ProtectedRoute>
+                <AdminLayout><ResellerAdmin /></AdminLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <AdminLayout><AdminDashboard /></AdminLayout>
+              </ProtectedRoute>
+            } />
+            
+            {/* Catch-all Route */}
+            <Route path="*" element={<UserLayout><NotFound /></UserLayout>} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
