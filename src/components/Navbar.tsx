@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ShoppingCart, User, Settings } from 'lucide-react';
+import { ShoppingBasket, User, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -43,7 +43,7 @@ const Navbar: React.FC = () => {
         
         <div className="flex items-center space-x-2">
           <Button variant="ghost" className="p-2" aria-label="Shopping cart">
-            <ShoppingCart className="h-5 w-5" />
+            <ShoppingBasket className="h-5 w-5" />
           </Button>
           
           {user ? (
