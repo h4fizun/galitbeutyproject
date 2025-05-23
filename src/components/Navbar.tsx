@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Navbar: React.FC = () => {
-  const { user, signOut } = useAuth();
+  const { user, userRole, signOut } = useAuth();
   const navigate = useNavigate();
-  const isAdmin = user && ['admin@example.com'].includes(user.email || ''); // Replace with your admin emails
+  const isAdmin = userRole === 'admin';
 
   const handleAuthAction = () => {
     if (!user) {

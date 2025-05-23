@@ -10,11 +10,9 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
-  const { user } = useAuth();
+  const { user, userRole } = useAuth();
   const navigate = useNavigate();
-  const adminEmails = ['admin@example.com']; // Replace with actual admin emails
-
-  const isAdmin = user && adminEmails.includes(user.email || '');
+  const isAdmin = userRole === 'admin';
 
   if (!isAdmin) {
     return (

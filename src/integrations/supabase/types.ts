@@ -19,6 +19,7 @@ export type Database = {
           last_name: string | null
           reseller_approved_at: string | null
           reseller_stage: Database["public"]["Enums"]["reseller_stage"] | null
+          role: Database["public"]["Enums"]["user_role"]
           updated_at: string
         }
         Insert: {
@@ -30,6 +31,7 @@ export type Database = {
           last_name?: string | null
           reseller_approved_at?: string | null
           reseller_stage?: Database["public"]["Enums"]["reseller_stage"] | null
+          role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
         }
         Update: {
@@ -41,6 +43,7 @@ export type Database = {
           last_name?: string | null
           reseller_approved_at?: string | null
           reseller_stage?: Database["public"]["Enums"]["reseller_stage"] | null
+          role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
         }
         Relationships: []
@@ -77,10 +80,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
     }
     Enums: {
       reseller_stage: "none" | "brown" | "silver" | "gold"
+      user_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -197,6 +204,7 @@ export const Constants = {
   public: {
     Enums: {
       reseller_stage: ["none", "brown", "silver", "gold"],
+      user_role: ["admin", "user"],
     },
   },
 } as const

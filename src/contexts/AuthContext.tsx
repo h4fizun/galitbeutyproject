@@ -4,10 +4,13 @@ import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 
+type UserRole = 'admin' | 'user';
+
 type AuthContextType = {
   session: Session | null;
   user: User | null;
   loading: boolean;
+  userRole: UserRole | null;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, firstName: string, lastName: string, applyAsReseller?: boolean) => Promise<void>;
   signOut: () => Promise<void>;
@@ -19,6 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -26,7 +30,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        setLoading(false);
+        
+        // If user logged in, fetch their role
+        if (session?.user) {
+          fetchUserRole();
+        } else {
+          setUserRole(null);
+        }
       }
     );
 
@@ -34,11 +44,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      // If user is logged in, fetch their role
+      if (session?.user) {
+        fetchUserRole();
+      }
       setLoading(false);
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const fetchUserRole = async () => {
+    try {
+      const { data, error } = await supabase.rpc('get_user_role');
+      if (error) throw error;
+      setUserRole(data as UserRole);
+    } catch (error) {
+      console.error('Error fetching user role:', error);
+      // Default to regular user if there's an error
+      setUserRole('user');
+    }
+  };
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -158,6 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         session,
         user,
         loading,
+        userRole,
         signIn,
         signUp,
         signOut

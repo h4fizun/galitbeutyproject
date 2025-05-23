@@ -36,12 +36,12 @@ const App = () => (
             
             {/* Admin Routes */}
             <Route path="/reseller-admin" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin={true}>
                 <AdminLayout><ResellerAdmin /></AdminLayout>
               </ProtectedRoute>
             } />
             <Route path="/admin" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin={true}>
                 <AdminLayout><AdminDashboard /></AdminLayout>
               </ProtectedRoute>
             } />
