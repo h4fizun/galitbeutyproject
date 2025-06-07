@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Male, Female } from 'lucide-react';
+import { User, Users } from 'lucide-react';
 
 const Skincare = () => {
   return (
@@ -13,7 +13,7 @@ const Skincare = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white p-8 rounded-lg border hover:shadow-lg transition-shadow cursor-pointer">
             <div className="flex items-center mb-4">
-              <Male className="h-8 w-8 text-beauty-600 mr-3" />
+              <User className="h-8 w-8 text-beauty-600 mr-3" />
               <h3 className="text-xl font-medium">Men's Skincare</h3>
             </div>
             <p className="text-gray-600 text-sm mb-4">Targeted skincare solutions designed specifically for men's skin needs</p>
@@ -21,7 +21,7 @@ const Skincare = () => {
           </div>
           <div className="bg-white p-8 rounded-lg border hover:shadow-lg transition-shadow cursor-pointer">
             <div className="flex items-center mb-4">
-              <Female className="h-8 w-8 text-beauty-600 mr-3" />
+              <Users className="h-8 w-8 text-beauty-600 mr-3" />
               <h3 className="text-xl font-medium">Women's Skincare</h3>
             </div>
             <p className="text-gray-600 text-sm mb-4">Comprehensive skincare range crafted for women's diverse skin concerns</p>
