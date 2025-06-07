@@ -35,11 +35,11 @@ const Navbar: React.FC = () => {
         </div>
         
         <div className="hidden md:flex items-center space-x-8">
-          <Link to="#" className="text-gray-700 hover:text-beauty-700 transition-colors">Skincare</Link>
-          <Link to="#" className="text-gray-700 hover:text-beauty-700 transition-colors">Makeup</Link>
-          <Link to="#" className="text-gray-700 hover:text-beauty-700 transition-colors">Body</Link>
-          <Link to="#" className="text-gray-700 hover:text-beauty-700 transition-colors">Collections</Link>
-          <Link to="#" className="text-gray-700 hover:text-beauty-700 transition-colors">About</Link>
+          <Link to="/skincare" className="text-gray-700 hover:text-beauty-700 transition-colors">Skincare</Link>
+          <Link to="/makeup" className="text-gray-700 hover:text-beauty-700 transition-colors">Makeup</Link>
+          <Link to="/body" className="text-gray-700 hover:text-beauty-700 transition-colors">Body</Link>
+          <Link to="/collections" className="text-gray-700 hover:text-beauty-700 transition-colors">Collections</Link>
+          <Link to="/about" className="text-gray-700 hover:text-beauty-700 transition-colors">About</Link>
         </div>
         
         <div className="flex items-center space-x-2">

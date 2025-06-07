@@ -14,6 +14,11 @@ import ResellerAdmin from "./pages/ResellerAdmin";
 import AdminDashboard from "./pages/AdminDashboard";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
+import Skincare from "./pages/Skincare";
+import Makeup from "./pages/Makeup";
+import Body from "./pages/Body";
+import Collections from "./pages/Collections";
+import About from "./pages/About";
 import UserLayout from "./layouts/UserLayout";
 import AdminLayout from "./layouts/AdminLayout";
 
@@ -29,6 +34,11 @@ const App = () => (
           <Routes>
             {/* User Routes */}
             <Route path="/" element={<UserLayout><Index /></UserLayout>} />
+            <Route path="/skincare" element={<UserLayout><Skincare /></UserLayout>} />
+            <Route path="/makeup" element={<UserLayout><Makeup /></UserLayout>} />
+            <Route path="/body" element={<UserLayout><Body /></UserLayout>} />
+            <Route path="/collections" element={<UserLayout><Collections /></UserLayout>} />
+            <Route path="/about" element={<UserLayout><About /></UserLayout>} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/checkout" element={<UserLayout><Checkout /></UserLayout>} />
             <Route path="/order-success" element={<UserLayout><OrderSuccess /></UserLayout>} />
