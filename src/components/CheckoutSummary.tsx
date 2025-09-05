@@ -22,10 +22,10 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
   onCheckout,
   isLoading
 }) => {
-  // Calculate totals
-  const subtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
-  const shipping = 5.99;
-  const tax = subtotal * 0.1; // 10% tax
+  // Calculate totals in Rupiah
+  const subtotal = items.reduce((total, item) => total + (item.price * 15000 * item.quantity), 0);
+  const shipping = 25000; // Rp 25,000
+  const tax = subtotal * 0.11; // 11% PPN
   const total = subtotal + shipping + tax;
   
   return (
@@ -45,7 +45,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
             <div className="flex-grow">
               <p className="font-medium">{item.name}</p>
               <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
-              <p className="font-medium">${item.price.toFixed(2)}</p>
+              <p className="font-medium">Rp {(item.price * 15000).toLocaleString('id-ID')}</p>
             </div>
           </div>
         ))}
@@ -56,22 +56,22 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
       <div className="space-y-2">
         <div className="flex justify-between">
           <span className="text-gray-600">Subtotal</span>
-          <span>${subtotal.toFixed(2)}</span>
+          <span>Rp {subtotal.toLocaleString('id-ID')}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Shipping</span>
-          <span>${shipping.toFixed(2)}</span>
+          <span>Rp {shipping.toLocaleString('id-ID')}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">Tax</span>
-          <span>${tax.toFixed(2)}</span>
+          <span className="text-gray-600">PPN (11%)</span>
+          <span>Rp {Math.round(tax).toLocaleString('id-ID')}</span>
         </div>
         
         <Separator className="my-2" />
         
         <div className="flex justify-between font-medium text-lg">
           <span>Total</span>
-          <span>${total.toFixed(2)}</span>
+          <span>Rp {Math.round(total).toLocaleString('id-ID')}</span>
         </div>
       </div>
       

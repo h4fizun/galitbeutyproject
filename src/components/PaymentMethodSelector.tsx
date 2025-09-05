@@ -41,11 +41,11 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
               Bank Transfer
             </Label>
           </div>
-          <p className="text-sm text-gray-500 mt-1">Transfer directly from your bank account</p>
-          <div className="mt-2 text-sm">
-            <p>Bank Account: 1234-5678-9012-3456</p>
-            <p>Account Name: BeautyMoment Inc.</p>
-          </div>
+           <p className="text-sm text-gray-500 mt-1">Transfer directly from your bank account</p>
+           <div className="mt-2 text-sm">
+             <p>Bank Account: 1234-567-890123 (BCA)</p>
+             <p>Account Name: BeautyMoment Indonesia</p>
+           </div>
         </div>
       </div>
       
